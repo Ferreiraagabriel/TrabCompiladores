@@ -6,22 +6,22 @@ int main(int argc, char* argv[])
     
     getline(cin, input);
 
-    //Scanner* scanner = new Scanner(input);
+    Scanner* scanner = new Scanner(input); //
     
 
-    //Token* t;
+    Token* t; //
 
     Parser* parser = new Parser(input);
     
     parser->run();
 
-    /*do
+    do //
     {
         t = scanner->nextToken();
         
         cout << t->name << " ";
-    }while (t->name != END_OF_FILE);
-    */
+    }while (t->name != END_OF_FILE);//
+    
 
     delete parser;
 

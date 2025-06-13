@@ -15,7 +15,23 @@ enum Names
     NUMBER,//6
     LPAREN,//7
     RPAREN,//8
-    END_OF_FILE//9
+    END_OF_FILE,//9
+    AND,//10
+    OR,//11
+    LESSTHAN,//12
+    GREATERTHAN,//13
+    ASSIGN,//14
+    EQUAL,//15
+    NOTEQUAL,//16
+    NOT,//17
+    LBRACKET,//18
+    RBRACKET,//19
+    LBRACE,//20
+    RBRACE,//21
+    SEMICOLON,//22
+    DOT,//23
+    COMMA,//24
+
 };
 
 class Token 

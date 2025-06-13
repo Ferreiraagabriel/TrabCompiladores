@@ -10,6 +10,8 @@ class Parser
         void match(int);
 
         void goal();
+        void BoolExpr();
+        void BoolExprLinha();
         void expr();
         void exprLinha();
         void term();

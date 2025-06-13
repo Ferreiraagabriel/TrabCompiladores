@@ -32,7 +32,93 @@ Parser::match(int t)
 void 
 Parser::goal()
 {
+	BoolExpr();
+}
+
+void 
+Parser::BoolExpr()
+{
 	expr();
+	BoolExprLinha();
+}
+
+void 
+Parser::BoolExprLinha()
+{
+	if (lToken->name == SEMICOLON)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+	if (lToken->name == DOT)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+	if (lToken->name == COMMA)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+	if (lToken->name == AND)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == OR)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == LESSTHAN)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == GREATERTHAN)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == ASSIGN)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == EQUAL)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == NOTEQUAL)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+
+	else if (lToken->name == NOT)
+	{
+		advance();
+		expr();
+		BoolExprLinha();
+	}
+	
 }
 
 void 
@@ -57,8 +143,6 @@ Parser::exprLinha()
 		term();
 		exprLinha();
 	}
-	//else
-	//	;
 }
 
 void 
@@ -97,6 +181,18 @@ Parser::factor()
 		advance();
 		expr();
 		match(RPAREN);
+	}
+	else if (lToken->name == LBRACKET)
+	{
+		advance();
+		expr();
+		match(RBRACKET);
+	}
+	else if (lToken->name == LBRACE)
+	{
+		advance();
+		expr();
+		match(RBRACE);
 	}
 	else
 		error("Fator mal formado!");
