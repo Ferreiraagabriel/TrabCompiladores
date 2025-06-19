@@ -1,0 +1,5 @@
+class Teste { public static void main (String[] args) { System.out.println(10); }}
+class Teste { public static void main (String[] args) { int = 10;}}
+class teste { public static void main (String[] args){ i = 5;}}
+class teste { public static void main (String[] args){ System.out.println(10);}}
+class teste { public static void main (String[] args){if (i == 0){System.out.println(10);}}}
