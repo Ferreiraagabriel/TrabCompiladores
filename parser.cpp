@@ -6,6 +6,57 @@ Parser::Parser(string input)
     advance();
 }
 
+// Identificador do tipo do erro
+string
+Parser::NameString(int NumToken)
+{
+	switch (NumToken){
+
+		case ID: return "ID";
+		case PLUS: return "PLUS ('+')";
+	    case MINUS: return "MINUS ('-')";
+    	case MULT: return "MULT ('*')";
+    	case DIV: return "DIV ('/')";
+    	case AND: return "AND ('&&')";
+    	case OR: return "OR ('||')";
+    	case EQUAL: return "EQUAL ('==')";
+    	case ASSIGN: return "ASSING ('=')";
+    	case NOTEQUAL: return "NOTEQUAL ('!=')";
+    	case NOT: return "NOT ('!')";
+    	case LESSTHAN: return "LESSTHAN ('<')";
+    	case GREATERTHAN: return "GREATERTHAN ('>')";
+    	case SEMICOLON: return "SEMICOLON (';')";
+    	case DOT: return "DOT ('.')";
+    	case COMMA: return "COMMA (',')";
+    	case LBRACKET: return "LBRACKET ('[')";
+		case RBRACKET: return "RBRACKET (']')";
+		case LBRACE: return "LBRACE ('{')";
+		case RBRACE: return "RBRACE ('}')";
+		case LPAREN: return "LPAREN ('(')";
+		case RPAREN: return "RPAREN (')')";
+		case NUMBER: return "NUMBER";
+		case FALSE: return "FALSE";
+		case TRUE: return "TRUE";
+		case BOOLEAN: return "BOOLEAN";
+		case CLASS: return "CLASS";
+		case ELSE: return "ELSE";
+		case EXTENDS: return "EXTENDS";
+		case IF: return "IF";
+		case INT: return "INT";
+		case LENGTH: return "LENGTH";
+		case MAIN: return "MAIN";
+		case NEW: return "NEW";
+		case PUBLIC: return "PUBLIC";
+		case RETURN: return "RETURN";
+		case STATIC: return "STATIC";
+		case STRING: return "STRING";
+		case THIS: return "THIS";
+		case VOID: return "VOID";
+		case WHILE: return "WHILE";
+		case SYSTEM_OUT_PRINTLN: return "System.out.println";
+		default: return "Token Desconhecido";
+	}
+}
 void
 Parser::run()
 {
@@ -17,7 +68,7 @@ Parser::advance()
 {
 	lToken = scanner->nextToken();
 
-    cout << lToken->name << endl;
+	//cout << lToken->name << endl;
 }
 
 void
@@ -26,7 +77,7 @@ Parser::match(int t)
 	if (lToken->name == t)
 		advance();
 	else
-		error("Erro inesperado");
+		error("Erro de sintaxe: Esperado " + NameString(t) + ", encontrado " + NameString(lToken->name) + ".");
 }
 
 void 
@@ -183,13 +234,13 @@ Parser::Type()
 		advance();
 	}
 	else
-		error("Tipo mal formado.");
+		error("Erro de tipo: Esperado 'int', 'boolean' ou 'ID', encontrado '" + lToken->lexeme + "'.");
 }
 
 void
 Parser::StatementStar()
 {
-	if (lToken->name == LBRACE || lToken->name == IF || lToken->name == WHILE || lToken->name ==  ID)
+	if (lToken->name == LBRACE || lToken->name == IF || lToken->name == WHILE || lToken->name ==  ID || lToken->name == SYSTEM_OUT_PRINTLN)
 	{
 		Statement();
 		StatementStar();
@@ -206,14 +257,19 @@ Parser::Statement()
 		match(RBRACE);
 	}
 	else if (lToken->name == IF)
-	{
+	{	
 		advance();
 		match(LPAREN);
 		Expression();
 		match(RPAREN);
 		Statement();
-		match(ELSE);
-		Statement();
+
+		if (lToken->name == ELSE)
+		{
+			advance();
+			Statement();
+		}
+		
 	}
 	else if (lToken->name == WHILE)
 	{
@@ -233,7 +289,6 @@ Parser::Statement()
 	}
 	else if (lToken->name == ID)
 	{
-		Token* firstIDToken = lToken;
 		advance();
 		if (lToken->name == ASSIGN)
 		{
@@ -261,10 +316,10 @@ Parser::Statement()
 			match(SEMICOLON);
 		}
 		else
-			error("Instrução mal formada ou ID não esperado após ID inicial.");
+			error("Erro de sintaxe: Após o identificador '" + lToken->lexeme + "'era esperado '=', '[' ou '('. Encontrado: '" + lToken->lexeme + "'.");
 	}
 	else
-		error("Instrução mal formada ou token inesperado. Encontrou: " + lToken->lexeme);
+		error("Erro de sintaxe: Token inesperado '" + lToken->lexeme + "' no inicio de uma instrução. Esperado: '{', 'if', 'while', 'System.out.println' ou 'ID'.");
 }
 
 void
@@ -353,7 +408,7 @@ Parser::AddSubExprLinha()
 void
 Parser::MulDivExpr()
 {
-	UnaryPrefixExpr();
+	PrefixUnaryExpr();
 	MulDivExprLinha();
 }
 
@@ -363,24 +418,24 @@ Parser::MulDivExprLinha()
 	if (lToken->name == MULT)
 	{
 		advance();
-		UnaryPrefixExpr();
+		PrefixUnaryExpr();
 		MulDivExprLinha();
 	}
 	else if (lToken->name == DIV)
 	{
 		advance();
-		UnaryPrefixExpr();
+		PrefixUnaryExpr();
 		MulDivExprLinha();
 	}
 }
 
 void
-Parser::UnaryPrefixExpr()
+Parser::PrefixUnaryExpr()
 {
 	if (lToken->name == NOT)
 	{
 		advance();
-		UnaryPrefixExpr();
+		PrefixUnaryExpr();
 	}
 	else
 	{
@@ -412,7 +467,7 @@ Parser::PostfixExpr()
 				match(RPAREN);
 			}
 			else
-				error("Esperado 'length' ou ID após '.'");
+				error("Esperado 'length' ou ID após o '.'");
 		}
 		else if (lToken->name == LBRACKET)
 		{
@@ -463,7 +518,7 @@ Parser::PrimaryExpr()
 			match(RPAREN);
 		}
 		else
-			error("Fator primário mal formado ou token inesperado. Encontrou: " + lToken->lexeme);
+			error("Erro de expressão: Após 'new' era esperado 'int ou 'ID' Encontrou: '" + lToken->lexeme + "'.");
 	}
 	else if (lToken->name == LPAREN)
 	{
@@ -473,7 +528,7 @@ Parser::PrimaryExpr()
 	}
 	else
 	{
-		error("Fator primário mal formado ou token inesperado. Encontrou: " + lToken->lexeme);
+		error("Erro de expressão: Era esperado um literal. Encontrou: '" + lToken->lexeme + "'.");
 	}
 }
 
@@ -501,7 +556,7 @@ Parser::ExpressionListLinha()
 void
 Parser::error(string str)
 {
-	cout << str << endl;
+	cout << "parser_error.minijava:" << lToken->lin << ":" << lToken->col << ": erro: " << str << endl;
 
 	exit(EXIT_FAILURE);
 }

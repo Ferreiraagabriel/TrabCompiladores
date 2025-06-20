@@ -71,6 +71,8 @@ class Token
     public: 
         int name;
         string lexeme;
+        int lin;
+        int col;
     
         Token(int name)
         {
@@ -78,9 +80,11 @@ class Token
             this->lexeme = "";
         }
         
-        Token(int name, const string& lexeme_Val)
+        Token(int name, const string& lexeme_Val, int lin = 0, int col = 0)
         {
             this->name = name;
-            lexeme = lexeme_Val;
+            this->lexeme = lexeme_Val;
+            this->lin = lin;
+            this->col = col;
         }
 };

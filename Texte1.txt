@@ -2,4 +2,10 @@ class Teste { public static void main (String[] args) { System.out.println(10); 
 class Teste { public static void main (String[] args) { int = 10;}}
 class teste { public static void main (String[] args){ i = 5;}}
 class teste { public static void main (String[] args){ System.out.println(10);}}
-class teste { public static void main (String[] args){if (i == 0){System.out.println(10);}}}
+class Teste{public static void main (String[] args){int = k;while ( i < 0){if (i == 0){System.out.println(10);}}}}
+
+class Teste {public static void main (String[] args) {int k;while (i < 0) {k = 0;if (i == 0) {System.out.println(10);}}}}
+
+class ExemploParser {public static void main (String[] args) {int num; int outroNum; num = 10: outroNum = 5; while (num < 20){System.out.println(num); if (num == 15) {num = num + outroNum;} else {num = num + 1;}} System.out.println(999);}}
+
+class ExemploCompleto{public static void main(String[] args){{a=10;b=5;while(a<20){System.out.println(a);if(a==15){a=a+b;}else{a=a+1;}}System.out.println(999);}}}
