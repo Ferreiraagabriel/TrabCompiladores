@@ -1,8 +1,15 @@
 class Teste{
-    public static void main(String[] args) {
-        if (a==0) //sfga
-        {
-            System.out.println(1);
+    public static void main(String[] args) {// ddwdw
+        if (a==0) 
+        {// ddwdw
+            /*kjdasfa
+            asdfad
+            asdfadadsf@
+            asdfadasdf
+            */
+            i = 1;
         }
+        else @
+        {i =1;}
     } 
-}
+}// ddwdw

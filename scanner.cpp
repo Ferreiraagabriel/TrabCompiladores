@@ -23,19 +23,87 @@ Scanner::nextToken()
     int tokLin = currentLin;
     int tokCol = currentCol;
 
+    //Tratamento de comentários
     //Consumir espaços em branco
-    while (pos < input.length() && isspace(input[pos]))
+    while (pos < input.length())
     {
-        if (input[pos] == '\n')
+        char CurrentPosChar = input[pos];
+        if(isspace(CurrentPosChar))
         {
-            currentLin++;
-            currentCol = 1;
+            if ( CurrentPosChar == '\n')
+            {
+                currentLin++;
+                currentCol = 1;
+            }
+            else
+                currentCol++;
+            pos++;
+            continue;
         }
-        else
-            currentCol++;
-        pos++;
-        tokLin = currentLin;
-        tokCol = currentCol;
+
+        else if (CurrentPosChar == '/')
+        {
+            if(pos + 1 < input.length())
+            {
+                char CurrentPosCharProx = input[pos + 1];
+
+                // Comentário de uma linha
+                if (CurrentPosCharProx == '/')
+                {
+                    pos+= 2; //Pula o '//'
+                    currentCol +=2;
+
+                    while (pos < input.length() && input[pos] != '\n')
+                    {
+                        pos++;
+                        currentCol++;
+                    }
+
+                    if (pos < input.length() && input[pos] == '\n')
+                    {
+                        pos++;
+                        currentCol = 1;
+                        currentLin++;
+                    }
+                    continue;
+                }
+                // Comentário do bloco /* */
+                else if (CurrentPosCharProx == '*')
+                {
+                    pos += 2; //Pula '/*'
+                    currentCol+=2;
+                    bool End = false;
+
+                    while (pos + 1 < input.length())
+                    {
+                        if (input[pos] == '*' && input[pos + 1] == '/')
+                        {
+                            pos+= 2; // Pula '*/'
+                            currentCol += 2;
+                            End = true;
+                            break;
+                        }
+
+                        if (input[pos] == '\n')
+                        {
+                            currentLin++;
+                            currentCol = 1;
+                        }
+                        else
+                        {
+                            currentCol++;
+                        }
+                        pos++;
+                    }
+                    if (!End) // Caso o comentário não tenha sido fechado antes do fim do arquivo
+                    {
+                        lexicalError();
+                    }
+                    continue;
+                }
+            }
+        }
+        break;
     }
 
     //Verificar os tokens possíveis
@@ -269,8 +337,7 @@ Scanner::nextToken()
 void 
 Scanner::lexicalError()
 {
-    cerr << "posição do erro" << pos << endl;
-    cerr << "Token mal formado\n";
+    cerr << "parser_error.minijava:" << currentLin << ":" << currentCol << ": erro: Erro lexico: Token não aceito." << endl;
     
     exit(EXIT_FAILURE);
 }

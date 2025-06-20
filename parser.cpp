@@ -262,12 +262,9 @@ Parser::Statement()
 		Expression();
 		match(RPAREN);
 		Statement();
-
-		if (lToken->name == ELSE)
-		{
-			advance();
-			Statement();
-		}
+		match(ELSE);
+		Statement();
+		
 		
 	}
 	else if (lToken->name == WHILE)
