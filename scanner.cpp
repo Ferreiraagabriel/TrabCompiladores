@@ -17,7 +17,7 @@ Scanner::Scanner(string input)
 //Método que retorna o próximo token da entrada
 Token* 
 Scanner::nextToken()
-{ 
+{   
     Token* tok;
     string lexeme;
     int tokLin = currentLin;
@@ -40,7 +40,7 @@ Scanner::nextToken()
 
     //Verificar os tokens possíveis
     //Fim de arquivo
-    if (input[pos] == '\0')
+    if (pos >= input.length())
     {
         tok = new Token(END_OF_FILE, "", currentLin, currentCol);
     }

@@ -1,8 +1,7 @@
 #include "parser.h"
 
-Parser::Parser(string input)
+Parser::Parser(Scanner* inputScanner, string fileNameParam) : scanner(inputScanner), fileName(fileNameParam)
 {
-	scanner = new Scanner(input);
     advance();
 }
 

@@ -5,6 +5,7 @@ class Parser
     private:
         Scanner* scanner;
         Token* lToken;
+        string fileName;
 
         // Métodos auxiliares
         void advance();
@@ -53,7 +54,7 @@ class Parser
         void error(string);
         
     public:
-        Parser(string);
+        Parser(Scanner* input, const string fileName);
 
         void run();
 };

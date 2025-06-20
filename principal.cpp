@@ -1,29 +1,39 @@
 #include "parser.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 int main(int argc, char* argv[]) 
 {
-    string input;
-    
-    getline(cin, input);
-
-    Scanner* scanner = new Scanner(input); //
-    
-
-    Token* t; //
-
-    Parser* parser = new Parser(input);
-    
-    parser->run();
-
-    do //
+    if (argc < 2)
     {
-        t = scanner->nextToken();
-        
-        cout << t->name << " ";
-    }while (t->name != END_OF_FILE);//
-    
+        cout << "Erro: Arquivo não fornecido." << argv[0] << endl;
+        return 1;
+    }
 
+    string fileName = argv[1];
+    ifstream input(fileName);  // Tenta abrir o arquivo
+
+    if(!input.is_open()) // Verifica se foi aberto
+    {
+        cout << "Erro: Nao foi possivel abrir o arquivo '" << fileName << "'." << endl;
+        return 1;
+    }
+
+    stringstream inputFileAux;
+    inputFileAux << input.rdbuf();  // Pega todo o arquivo de uma vez
+    string inputFile = inputFileAux.str();  // Converte para string
+    input.close();
+
+    Scanner* scanner = new Scanner(inputFile); //
+    Parser* parser = new Parser(scanner, fileName);
+
+    parser->run();
+    
+    cout << "Compilação concluida!" << endl;
     delete parser;
+    delete scanner;
 
     return 0;
 }   
